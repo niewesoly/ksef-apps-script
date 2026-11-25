@@ -10,17 +10,23 @@ Co musisz mieć przygotowane:
 
 | Co | Skąd to wziąć |
 | --- | --- |
-| Konto Google (najlepiej w domenie ZHR) | Twoje zwykłe konto |
+| Osobne konto Google do faktur, np. `faktury.hufiec@zhr.pl` | Zakładasz nowe lub dostajesz od administratora domeny |
 | Klucz API (API key) | Od administratora KSeF ZHR |
 | Tenant ID | Od administratora KSeF ZHR |
 | Adres serwisu (service URL) — jest już wpisany w skrypcie: `https://ksef.zhr.pl` | Nic nie trzeba robić |
 | Folder na Dysku Google (najlepiej na dysku współdzielonym) | Tworzysz go w kroku 1 |
+
+**Dlaczego osobne konto?** Skrypt działa z konta, na którym go skonfigurujesz, i z tego konta Google wysyła maile o udostępnieniu faktury. Wspólne konto, np. `faktury.hufiec@zhr.pl`, sprawia, że odbiorcy widzą stałą nazwę nadawcy, a nie prywatny adres skarbnika. Konto zostaje też w jednostce, gdy zmienia się osoba odpowiedzialna za faktury.
+
+Kroki 1–4 wykonuj zalogowany na koncie do faktur. Najłatwiej w osobnym profilu Chrome lub oknie incognito, żeby nie pomylić kont.
 
 Klucz API działa jak hasło do faktur Twojej jednostki. Nie wysyłaj go mailem dalej, nie wklejaj w komórki arkusza i nie pokazuj na zrzutach ekranu.
 
 ## Krok 1: Arkusz i folder na PDF-y
 
 Potrzebujesz jednego pustego arkusza i jednego folderu, do którego trafią PDF-y faktur.
+
+Jeśli używasz dysku współdzielonego jednostki, najpierw dodaj do niego konto do faktur jako **Menedżer treści** (prawy przycisk na dysku → **Zarządzaj członkami**). Bez tego skrypt nie zapisze ani nie udostępni PDF-ów.
 
 1. Wejdź na [drive.google.com](https://drive.google.com) i otwórz dysk współdzielony swojej jednostki (lub „Mój dysk”).
 2. Kliknij **Nowy → Folder** i nazwij go np. `Faktury KSeF`.
@@ -30,7 +36,7 @@ Potrzebujesz jednego pustego arkusza i jednego folderu, do którego trafią PDF-
 4. Wróć do Dysku i kliknij **Nowy → Arkusze Google → Pusty arkusz**.
 5. Nazwij arkusz, np. `Faktury KSeF — Hufiec X`.
 
-Arkusza nie musisz niczym wypełniać — skrypt sam utworzy potrzebne zakładki.
+Arkusza nie musisz niczym wypełniać — skrypt sam utworzy potrzebne zakładki. Możesz od razu udostępnić go (**Udostępnij**, prawy górny róg) swojemu prywatnemu kontu jako edytor — na co dzień będziesz pracować z niego.
 
 ## Krok 2: Wklejenie skryptu
 
@@ -72,7 +78,7 @@ Jednorazowa konfiguracja tworzy zakładki w arkuszu i ustawia automatyczne pobie
 
 1. Wróć do karty z arkuszem i odśwież ją (**F5**). Po kilku sekundach w górnym menu, obok „Pomoc”, pojawi się menu **KSeF**.
 2. Kliknij **KSeF → Jednorazowa konfiguracja**.
-3. Google poprosi o autoryzację. Kliknij **Kontynuuj** i wybierz swoje konto.
+3. Google poprosi o autoryzację. Kliknij **Kontynuuj** i wybierz konto do faktur.
 4. Może pojawić się ekran „Google nie zweryfikował tej aplikacji”. To normalne dla własnych skryptów: kliknij **Zaawansowane → Przejdź do KSeF ZHR (niebezpieczne)**.
 5. Zaznacz wszystkie zgody i kliknij **Zezwól**. Skrypt potrzebuje dostępu do arkusza, Dysku i połączeń z internetem.
 6. Jeśli po autoryzacji nic się nie dzieje, kliknij **KSeF → Jednorazowa konfiguracja** jeszcze raz.
@@ -88,7 +94,7 @@ Pierwsza synchronizacja może trwać kilka minut, jeśli faktur jest dużo.
 
 ## Krok 5: Codzienna praca
 
-Faktury pobierają się same co 30 minut; Twoja praca to przypisanie każdej faktury do jednostki lub wydarzenia.
+Faktury pobierają się same co 30 minut; Twoja praca to przypisanie każdej faktury do jednostki lub wydarzenia. Możesz to robić ze swojego prywatnego konta — maile i tak wyjdą z konta do faktur.
 
 Najpierw raz przygotuj listy:
 
@@ -99,13 +105,14 @@ Potem, przy każdej nowej fakturze:
 
 1. Otwórz zakładkę **Pula**. Każdy wiersz to jedna faktura: numer, data, sprzedawca, kwota i link **PDF**.
 2. W kolumnie **Wydarzenie / Jednostka** wybierz z listy, do kogo należy faktura.
-3. Skrypt od razu udostępni PDF wszystkim adresom przypisanym do tej jednostki; dostaną maila od Google. Jeśli udostępnianie nie zadziała, użyj **KSeF → Udostępnij oznaczone faktury**.
+3. Skrypt od razu udostępni PDF wszystkim adresom przypisanym do tej jednostki; dostaną maila od Google. Jeśli udostępnianie nie zadziała, zaloguj się na konto do faktur i użyj **KSeF → Udostępnij oznaczone faktury**.
 
 Czego nie robić:
 
 - Nie usuwaj ukrytej kolumny **ID (nie usuwać)** — po niej skrypt rozpoznaje, które faktury już pobrał.
 - Nie zmieniaj nazw zakładek **Pula**, **Konfiguracja**, **Uprawnienia**.
 - Zmiana jednostki na inną nie odbiera dostępu poprzednim osobom — trzeba to zrobić ręcznie na Dysku.
+- Nie klikaj pozycji z menu **KSeF** (poza przypisywaniem jednostek w Puli) ze swojego prywatnego konta. Uruchomione z niego, wyślą maile z Twojego adresu albo przestawią automatyczne zadania na Twoje konto.
 
 ## Gdy coś nie działa
 
@@ -120,13 +127,13 @@ Większość problemów to literówka we właściwościach skryptu albo brak us�
 | „Nie mogę otworzyć folderu o ID…” | ID folderu jest błędne albo nie masz do niego dostępu. Skopiuj je ponownie z paska adresu. |
 | „Limit pasma Apps Script wyczerpany” | Nic nie rób. Google ogranicza dzienny transfer; reszta faktur pobierze się sama następnego dnia. |
 | W kolumnie PDF jest kreska „—” | PDF nie był jeszcze gotowy w serwisie. Zgłoś numer faktury administratorowi. |
-| Wybór jednostki nie udostępnia PDF | Kliknij **KSeF → Zainstaluj trigger onEdit**, potem **KSeF → Diagnostyka**. Sprawdź, czy jednostka ma adresy w **Uprawnieniach**. |
+| Wybór jednostki nie udostępnia PDF | Na koncie do faktur kliknij **KSeF → Zainstaluj trigger onEdit**, potem **KSeF → Diagnostyka**. Sprawdź, czy jednostka ma adresy w **Uprawnieniach**. |
 | Brak menu **KSeF** | Odśwież arkusz i odczekaj 10 sekund. Jeśli dalej brak, sprawdź, czy kod w kroku 2 został zapisany. |
 
 ## Bezpieczeństwo klucza API
 
 - Edytujący arkusz mogą otworzyć Apps Script i zobaczyć klucz. Dawaj prawo edycji tylko zaufanym osobom; reszcie — tylko podgląd.
 - Jeśli klucz wyciekł albo ktoś z dostępem odchodzi z funkcji, napisz do administratora o nowy klucz i podmień go w kroku 3.
-- Automatyczna synchronizacja działa z Twojego konta Google. Gdy przekazujesz obowiązki, nowa osoba powinna ponownie wykonać krok 4.
+- Hasło do konta do faktur trzymaj w bezpiecznym miejscu (np. menedżerze haseł) i włącz na nim weryfikację dwuetapową. Gdy przekazujesz obowiązki, przekaż dostęp do tego konta i zmień hasło — skryptu nie trzeba konfigurować od nowa.
 
 Z pytaniami, których tu nie ma, zwróć się do administratora KSeF ZHR i dołącz zrzut ekranu z **KSeF → Diagnostyka** (nie pokazuje on klucza API).
